@@ -1,0 +1,62 @@
+
+
+* {
+    font-family: 'Fontdiner Swanky', cursive;
+    text-align: center;
+}
+/*font-family: 'PT Serif', serif;*/
+
+
+body {
+    background-color: #72d1f6;
+    background-image: url("images/pirateIsland320px.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-height: 100vh;
+
+}
+
+@media only screen and (min-width: 768px) {
+    body {
+        background-color: #72d1f6;
+        background-image: url("images/pirateIsland768px.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        max-height: 100vh;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    body {
+        background-color: #72d1f6;
+        background-image: url("images/pirateIsland1024px.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        max-height: 100vh;
+    }
+}
+
+.header {
+    height: 25%;
+    color: #181818;
+    font-size: 275%;
+    text-shadow: 2px 2px 4px #cc0000;
+    margin-top: 5%;
+    margin-bottom: 5%;
+
+}
+
+.gameButton {
+    width: 200px;
+    margin: 2% auto;
+    background-color: #ffcc66;
+    border: 2px solid #e69900;
+    border-radius: 5px;
+    box-shadow: 2px 2px #e69900;
+    font-size: 125%;
+}
+
+.gameButton:hover {
+    box-shadow: 4px 4px 12px #e69900;
+    text-shadow: 2px 2px #FFFFFF;
+}
