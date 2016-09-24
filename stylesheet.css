@@ -1,15 +1,13 @@
-
+/* Unlock The Treasure Chest CSS by Rosemarie Gonzales */
 
 * {
     font-family: 'Fontdiner Swanky', cursive;
     text-align: center;
 }
-/*font-family: 'PT Serif', serif;*/
-
 
 body {
     background-color: #72d1f6;
-    background-image: url("images/pirateIsland320px.jpg");
+    background-image: url("assets/pirateIsland320px.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     max-height: 100vh;
@@ -19,44 +17,94 @@ body {
 @media only screen and (min-width: 768px) {
     body {
         background-color: #72d1f6;
-        background-image: url("images/pirateIsland768px.jpg");
+        background-image: url("assets/pirateIsland768px.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         max-height: 100vh;
     }
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 850px) {
     body {
         background-color: #72d1f6;
-        background-image: url("images/pirateIsland1024px.jpg");
+        background-image: url("assets/pirateIsland.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         max-height: 100vh;
     }
 }
 
-.header {
-    height: 25%;
-    color: #181818;
-    font-size: 275%;
-    text-shadow: 2px 2px 4px #cc0000;
-    margin-top: 5%;
-    margin-bottom: 5%;
+p {
+    font-family: 'PT Serif', serif;
+}
 
+h1 {
+    color: #e69900;
+    text-shadow: 2px 2px 4px #000000;
+    clear: right;
+}
+
+a {
+    text-decoration: none;
+    color: #e69900;
+    text-shadow: 2px 2px #FFFFFF;
+}
+
+a:hover {
+    cursor: pointer;
+    color: #000000;
+}
+
+.gameTitle {
+    height: 15vh;
+    color: #181818;
+    font-size: 6vh;
+    text-shadow: 2px 2px 4px #cc0000;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+}
+
+#gameButtonsContainer {
+    display: block;
 }
 
 .gameButton {
-    width: 200px;
-    margin: 2% auto;
+    width: 30vw;
+    margin: 2vh auto;
     background-color: #ffcc66;
     border: 2px solid #e69900;
     border-radius: 5px;
     box-shadow: 2px 2px #e69900;
-    font-size: 125%;
+    font-size: 3vw;
 }
 
 .gameButton:hover {
+    cursor: pointer;
     box-shadow: 4px 4px 12px #e69900;
     text-shadow: 2px 2px #FFFFFF;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    width: 80vw;
+    margin-top: 5vh;
+    z-index: 1; /* Sit on top */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #9ae59a;
+}
+
+.modalContent {
+    margin: auto;
+    padding: 2vw;
+}
+
+.closeModal {
+    float: right;
+    color: #505050;
+    text-shadow: 2px 2px #FFFFFF;
+}
+
+.closeModal:hover {
+    cursor: pointer;
+    color: #000000;
 }

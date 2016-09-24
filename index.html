@@ -13,9 +13,43 @@
     <title>Unlock The Treasure Chest</title>
 </head>
 <body>
-<div class="header">Unlock The Treasure Chest</div>
-<div class="gameButton">Play</div>
-<div class="gameButton">How To Play</div>
-<div class="gameButton">About The Game</div>
+<div class="gameTitle">Unlock The Treasure Chest</div>
+
+<div id="gameButtonsContainer">
+<div id="playButton" class="gameButton">Play</div>
+<div id="howToPlayButton" class="gameButton">How To Play</div>
+<div id="aboutTheGameButton" class="gameButton">About The Game</div>
+</div>
+
+
+<!-- Modal: How To Play -->
+<div id="howToPlay" class="modal">
+    <div class="modalContent">
+        <span id="closeHowToPlay" class="closeModal">Close</span>
+        <h1>How To Play</h1>
+        <p>Captain Smith finds a treasure chest in an island and is having a hard time unlocking it. He sees another pirate (player) and asks the pirate to help him unlock the chest on the condition that he gets half of what is inside.</p>
+        <p>To play the game, player enters his/her name and clicks on the “Start” button. To unlock the chest, player needs to guess the 3-digit combination by scrolling through the numbers on the lock and clicking on the “Unlock” button.</p>
+        <p>If the combination is right, treasure chest is opened and player wins. However, if the combination is wrong, player will be notified and gets to guess the combination again. The player is being timed as to how long he/she can unlock the chest. Player only loses when he/she gives up and clicks on the “Give up” button.</p>
+        <p>When the “Give up” button is clicked, the correct combination will be displayed and the player gets to choose to play again (resets the game) or close the game.</p>
+    </div>
+</div>
+
+
+<!-- Modal: About The Game -->
+<div id="aboutTheGame" class="modal">
+    <div class="modalContent">
+        <span id="closeAboutTheGame" class="closeModal">Close</span>
+        <h1>About The Game</h1>
+        <h3>Game Concept</h3>
+        <p>Unlock The Treasure Chest is a pirate-themed guessing game where the player guesses the 3-digit lock combination of the treasure chest to find out what is inside the chest. The player is being timed as to how long he/she can open the chest. The 3-digit lock combination is randomly picked by the computer so it changes every game.</p>
+        <h3>Technology</h3>
+        <p>Responsive web design and being mobile-first were considered primarily during the conceptualization of this application. The basic layout and structure were created using HTML and custom-styling was done using CSS. Core JavaScript was used to create the game’s features and functionality.</p>
+        <h3>Disclaimer and Credits</h3>
+        <p>Images such as the background, pirates and treasure chest are from the internet. The rest of the graphics were done by the developer. This application is for portfolio / demo purposes only and not intended for commercial use.</p>
+        <br>
+        <a href="http://www.rosemariegonzales.com/about" target="_blank">Get to know the application developer</a>
+    </div>
+</div>
+
 </body>
 </html>
