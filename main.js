@@ -1,8 +1,6 @@
-/*
- Unlock The Treasure Chest
- Main Javascript File
- Created by Rosemarie Gonzales
- */
+/*-------------- UNLOCK THE TREASURE CHEST -------------*/
+/* Main Javascript File. Created by Rosemarie Gonzales. */
+
 
 //Variables for the different DOM elements and game logic
 var body;
@@ -22,6 +20,14 @@ var carouselIndex1 = 0;
 var carouselIndex2 = 0;
 var carouselIndex3 = 0;
 var lockCombination = [];
+var selectedNumbers;
+var selectedNumbersArray = [];
+var message = [];
+var match = false;
+var counter = 0;
+
+
+/*---------- DOM ELEMENT CREATION ----------*/
 
 //Activate click handlers once the window loads
 window.onload = function () {
@@ -61,29 +67,6 @@ function startGame() {
     gameArea.innerHTML = "";
     generateLockCombination();
     createLockArea();
-}
-
-//Generate 3-digit lock combination
-function generateLockCombination() {
-    for (var i = 0; i < 3; i++) {
-        var number = Math.floor(Math.random() * 10);
-        lockCombination.push(number);
-    }
-    console.log('lock combination: ', lockCombination);
-    checkLockCombination();
-}
-
-//Check if lock combination contains 2 same numbers
-function checkLockCombination() {
-    if (lockCombination[0] == lockCombination[1] ||
-        lockCombination[0] == lockCombination[2] ||
-        lockCombination[1] == lockCombination[2]) {
-        lockCombination = [];
-        generateLockCombination();
-        console.log('generate lock again.. 2 same numbers present');
-    } else {
-        return lockCombination;
-    }
 }
 
 //Create lock area
@@ -152,6 +135,32 @@ function createUnlockButton() {
     unlockButton.addEventListener("click", unlock);
     lockContainer.appendChild(unlockButton);
 
+}
+
+
+/*---------- GAME LOGIC ----------*/
+
+//Generate 3-digit lock combination
+function generateLockCombination() {
+    for (var i = 0; i < 3; i++) {
+        var number = Math.floor(Math.random() * 10);
+        lockCombination.push(number);
+    }
+    console.log('lock combination: ', lockCombination);
+    checkLockCombination();
+}
+
+//Check if lock combination contains 2 same numbers
+function checkLockCombination() {
+    if (lockCombination[0] == lockCombination[1] ||
+        lockCombination[0] == lockCombination[2] ||
+        lockCombination[1] == lockCombination[2]) {
+        lockCombination = [];
+        generateLockCombination();
+        console.log('generate lock again.. 2 same numbers present');
+    } else {
+        return lockCombination;
+    }
 }
 
 //Hide numbers in lock carousel
@@ -234,22 +243,69 @@ function checkCarouselIndexValue(index) {
     }
 }
 
-//When the "Unlock" button is clicked, check if chosen combination matches the winning combination
+//When the "Unlock" button is clicked, get selected numbers and run function to check matches
 function unlock() {
     console.log('unlock function called');
     clickSound();
-    var selectedNumbers = document.getElementsByClassName("selected");
-    var selectedNumbersArray = [];
+    selectedNumbers = document.getElementsByClassName("selected");
+    selectedNumbersArray = [];
+    message = [];
     for (var i = 0; i < selectedNumbers.length; i++) {
         selectedNumbersArray.push(selectedNumbers[i].innerHTML);
     }
-    for (var x=0; x < selectedNumbersArray.length; x++) {
-        if (selectedNumbersArray[x] == lockCombination[x]) {
-            correctNumber++;
+    console.log(selectedNumbersArray);
+    checkMatches();
+}
+
+//Check if chosen combination matches the computer-generated lock combination
+function checkMatches() {
+    for (var i = 0; i < selectedNumbersArray.length; i++) {
+        if (selectedNumbersArray[i] == lockCombination[i]) {
+            counter ++;
         }
     }
-    console.log(selectedNumbersArray);
+    if (counter == 3) {
+        match = true;
+        counter = 0;
+        message.push("Yay! You did it Mate!");
+        winningState();
+    }
+    else if (counter == 0) {
+        message.push("Sorry, mate. Try Again!");
+        sorrySound();
+        tryAgainState();
+    }
+    else {
+        if (selectedNumbersArray[0] == lockCombination[0]) {
+            message.push("You got the first number!");
+        }
+        if (selectedNumbersArray[1] == lockCombination[1]) {
+            message.push("The second number is correct.");
+        }
+        if (selectedNumbersArray[2] == lockCombination[2]) {
+            message.push("You got the third number right.")
+        }
+        counter = 0;
+        almostWinningState();
+    }
+    console.log(message);
 }
+
+//Change display to winning state
+function winningState() {
+    tadaSound();
+}
+
+function tryAgainState() {
+    sorrySound();
+}
+
+function almostWinningState() {
+    chimeSound();
+}
+
+
+/*---------- MODALS ----------*/
 
 //Display the "How To Play" Modal
 function displayHowToPlayModal() {
@@ -280,12 +336,37 @@ function closeAboutTheGameModal() {
     document.getElementById("gameButtonsContainer").style.display = "block";
 }
 
+
+/*---------- SOUND EFFECTS ----------*/
+
 //Click sound effect
 function clickSound() {
     var clickAudio = document.createElement("audio");
     clickAudio.src = "assets/clickOn.mp3";
     clickAudio.play();
 }
+
+//Try again sound effect
+function sorrySound() {
+    var sorryAudio = document.createElement("audio");
+    sorryAudio.src = "assets/sowee.mp3";
+    sorryAudio.play();
+}
+
+//Winner sound effect
+function tadaSound() {
+    var tadaAudio = document.createElement("audio");
+    tadaAudio.src = "assets/TaDa.mp3";
+    tadaAudio.play();
+}
+
+//Chime sound effect
+function chimeSound() {
+    var chimeAudio = document.createElement("audio");
+    chimeAudio.src = "assets/chime.mp3";
+    chimeAudio.play();
+}
+
 
 
 
