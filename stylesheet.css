@@ -46,7 +46,7 @@ h1 {
 
 a {
     text-decoration: none;
-    color: #e69900;
+    color: #cc0000;
     text-shadow: 2px 2px #FFFFFF;
 }
 
@@ -55,7 +55,7 @@ a:hover {
     color: #000000;
 }
 
-.gameTitle {
+#gameTitle {
     height: 15vh;
     color: #181818;
     font-size: 6vh;
@@ -107,4 +107,78 @@ a:hover {
 .closeModal:hover {
     cursor: pointer;
     color: #000000;
+}
+
+#gameArea {
+    display: inline-block;
+    height: 100vh;
+}
+
+#gameIntro {
+    width: 80vw;
+    background-color: #FFFFFF;
+    opacity: 0.9;
+    border: 5px solid #e69900;
+    border-radius: 50px;
+    padding: 2vw;
+    overflow: auto;
+    font-size: 2.5vw;
+}
+
+#lockContainer {
+    display: block;
+    position: relative;
+    width: 70vw;
+    margin: 20vh auto;
+    background-color: #86592d;
+    border: 15px solid #e69900;
+    box-shadow: 5px 5px 15px  #505050;
+}
+
+#lockCarouselArea {
+    display: block;
+    margin: 2vw auto;
+}
+
+.lockCarousel {
+    display: inline-block;
+}
+
+.upButton {
+    display: block;
+}
+
+.fa-chevron-up{
+    margin: 0 5vw;
+}
+
+.lockNumber {
+    display: block;
+    width: 14vw;
+    padding: auto;
+    margin: 1vw;
+    background-color: #FFFFFF;
+    border: 4px solid #ffcc66;
+    border-radius: 2px;
+    font-size: 12vw;
+    transition: all 2s ease;
+}
+
+.lockNumber:target {
+   height: 100%;
+}
+
+
+.downButton {
+    display: block;
+}
+
+.fa-chevron-down{
+    margin: 0 5vw;
+}
+
+.fa:hover {
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px #000000;
+    cursor: pointer;
 }
