@@ -84,6 +84,17 @@ a:hover {
     text-shadow: 2px 2px #FFFFFF;
 }
 
+.gameButton.disabled {
+    color: #707070;
+}
+
+.gameButton.disabled:hover {
+    color: #707070;
+    cursor: default;
+    box-shadow: 2px 2px #e69900;
+    text-shadow: none;
+}
+
 .modal {
     display: none; /* Hidden by default */
     width: 80vw;
@@ -111,7 +122,8 @@ a:hover {
 
 #gameArea {
     display: inline-block;
-    height: 100vh;
+    max-height: 100vh;
+    margin: auto;
 }
 
 #gameIntro {
@@ -125,19 +137,28 @@ a:hover {
     font-size: 2.5vw;
 }
 
+#messageContainer {
+    display: inline-block;
+    position: relative;
+    visibility: visible;
+    width: 70vw;
+    margin: 8vh 0 auto;
+    font-size: 5vw;
+}
+
 #lockContainer {
     display: block;
     position: relative;
     width: 70vw;
-    margin: 20vh auto;
+    margin: 5vh auto;
     background-color: #86592d;
-    border: 15px solid #e69900;
+    border: 10px solid #e69900;
     box-shadow: 5px 5px 15px  #505050;
 }
 
 #lockCarouselArea {
     display: block;
-    margin: 2vw auto;
+    margin: 1vw auto;
 }
 
 .lockCarousel {
@@ -154,20 +175,14 @@ a:hover {
 
 .lockNumber {
     display: block;
-    width: 14vw;
+    width: 12vw;
     padding: auto;
     margin: 1vw;
     background-color: #FFFFFF;
     border: 4px solid #ffcc66;
     border-radius: 2px;
-    font-size: 12vw;
-    transition: all 2s ease;
+    font-size: 10vw;
 }
-
-.lockNumber:target {
-   height: 100%;
-}
-
 
 .downButton {
     display: block;
@@ -181,4 +196,15 @@ a:hover {
     color: #FFFFFF;
     text-shadow: 2px 2px 4px #000000;
     cursor: pointer;
+}
+
+.error {
+    text-decoration: line-through;
+    text-decoration-color: #cc0000;
+}
+
+.errorMessage {
+    font-size: 5vw;
+    color: #cc0000;
+    text-shadow: 2px 2px 2px #000000;
 }

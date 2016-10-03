@@ -7,6 +7,7 @@ var body;
 var gameArea;
 var gameIntro;
 var startButton;
+var messageContainer;
 var lockContainer;
 var lockCarouselArea;
 var lockCarousel;
@@ -31,7 +32,6 @@ var counter = 0;
 
 //Activate click handlers once the window loads
 window.onload = function () {
-    console.log('window loaded');
     document.getElementById("playButton").addEventListener("click", createGameArea);
     document.getElementById("howToPlayButton").addEventListener("click", displayHowToPlayModal);
     document.getElementById("aboutTheGameButton").addEventListener("click", displayAboutTheGameModal);
@@ -71,6 +71,13 @@ function startGame() {
 
 //Create lock area
 function createLockArea() {
+    //Create container for messages
+    messageContainer = document.createElement("div");
+    messageContainer.id = "messageContainer";
+    message.push("Start guessing!");
+    messageContainer.innerHTML = message[0];
+    gameArea.appendChild(messageContainer);
+
     //Create container for the lock carousel
     lockContainer = document.createElement("div");
     lockContainer.id = "lockContainer";
@@ -130,9 +137,8 @@ function createLockCarousel() {
 function createUnlockButton() {
     unlockButton = document.createElement("div");
     unlockButton.id = "unlockButton";
-    unlockButton.setAttribute("class", "gameButton");
     unlockButton.innerHTML = "Unlock";
-    unlockButton.addEventListener("click", unlock);
+    enableUnlockButton();
     lockContainer.appendChild(unlockButton);
 
 }
@@ -165,7 +171,6 @@ function checkLockCombination() {
 
 //Hide numbers in lock carousel
 function hideNumbers(lockCarouselId) {
-    console.log("hideNumber function called");
     var hideNumbersCarousel = document.getElementById(lockCarouselId);
     var hideNumbersArray = hideNumbersCarousel.getElementsByClassName("lockNumber");
     for (var i = 0; i < hideNumbersArray.length; i++) {
@@ -186,6 +191,8 @@ function showNumber(lockCarouselId, index) {
 //Scroll number in lock carousel
 function scrollNumber() {
     clickSound();
+    hideMessage();
+    enableUnlockButton();
 
     //Check whether to scroll up or down
     var n;
@@ -193,7 +200,6 @@ function scrollNumber() {
         n = 1;
     }
     else if (this.getAttribute("class") == "downButton") {
-        console.log("scroll down");
         n = -1;
     }
 
@@ -201,35 +207,28 @@ function scrollNumber() {
     var scrollThisCarousel = this.parentElement;
     switch (scrollThisCarousel.id) {
         case "lockCarousel1":
-            console.log("carouselIndex1: ", carouselIndex1);
             hideNumbers(scrollThisCarousel.id);
             carouselIndex1 += n;
             carouselIndex1 = checkCarouselIndexValue(carouselIndex1);
             showNumber(scrollThisCarousel.id, carouselIndex1);
-            console.log("carouselIndex1: ", carouselIndex1);
             break;
         case "lockCarousel2":
-            console.log("carouselIndex2: ", carouselIndex2);
             hideNumbers(scrollThisCarousel.id);
             carouselIndex2 += n;
             carouselIndex2 = checkCarouselIndexValue(carouselIndex2);
             showNumber(scrollThisCarousel.id, carouselIndex2);
-            console.log("carouselIndex2: ", carouselIndex2);
             break;
         case "lockCarousel3":
-            console.log("carouselIndex3: ", carouselIndex3);
             hideNumbers(scrollThisCarousel.id);
             carouselIndex3 += n;
             carouselIndex3 = checkCarouselIndexValue(carouselIndex3);
             showNumber(scrollThisCarousel.id, carouselIndex3);
-            console.log("carouselIndex3: ", carouselIndex3);
             break;
     }
 }
 
 //Check carousel index value
 function checkCarouselIndexValue(index) {
-    console.log("checkCarouselIndexValue function called");
     if (index > 9) {
         index = 0;
         return index;
@@ -243,25 +242,49 @@ function checkCarouselIndexValue(index) {
     }
 }
 
+//Hide message container
+function hideMessage() {
+    messageContainer.style.visibility = "hidden";
+}
+
+//Show message container
+function showMessage() {
+    messageContainer.style.visibility = "visible";
+}
+
 //When the "Unlock" button is clicked, get selected numbers and run function to check matches
 function unlock() {
-    console.log('unlock function called');
+    disableUnlockButton();
     clickSound();
+    hideMessage();
     selectedNumbers = document.getElementsByClassName("selected");
     selectedNumbersArray = [];
     message = [];
     for (var i = 0; i < selectedNumbers.length; i++) {
         selectedNumbersArray.push(selectedNumbers[i].innerHTML);
     }
-    console.log(selectedNumbersArray);
     checkMatches();
+}
+
+//Enable "Unlock" button
+function enableUnlockButton() {
+    console.log("enableUnlockButton function called");
+    unlockButton.addEventListener("click", unlock);
+    unlockButton.setAttribute("class", "gameButton");
+}
+
+//Disable "Unlock" button
+function disableUnlockButton() {
+    console.log("disableUnlockButton function called");
+    unlockButton.removeEventListener("click", unlock);
+    unlockButton.setAttribute("class", "gameButton disabled");
 }
 
 //Check if chosen combination matches the computer-generated lock combination
 function checkMatches() {
     for (var i = 0; i < selectedNumbersArray.length; i++) {
         if (selectedNumbersArray[i] == lockCombination[i]) {
-            counter ++;
+            counter++;
         }
     }
     if (counter == 3) {
@@ -296,8 +319,18 @@ function winningState() {
     tadaSound();
 }
 
+//Display "try again" state
 function tryAgainState() {
     sorrySound();
+    for (var i=0; i<selectedNumbers.length; i++){
+        selectedNumbers[i].setAttribute("class", "lockNumber selected error");
+    }
+    var tryAgainMessage = document.createElement("div");
+    tryAgainMessage.setAttribute("class", "errorMessage");
+    tryAgainMessage.innerHTML = message[0];
+    messageContainer.innerHTML = "";
+    messageContainer.appendChild(tryAgainMessage);
+    showMessage();
 }
 
 function almostWinningState() {
