@@ -26,6 +26,7 @@ var selectedNumbersArray = [];
 var message = [];
 var match = false;
 var counter = 0;
+var correctNumbersArray = [];
 
 
 /*---------- DOM ELEMENT CREATION ----------*/
@@ -140,7 +141,6 @@ function createUnlockButton() {
     unlockButton.innerHTML = "Unlock";
     enableUnlockButton();
     lockContainer.appendChild(unlockButton);
-
 }
 
 
@@ -193,6 +193,7 @@ function scrollNumber() {
     clickSound();
     hideMessage();
     enableUnlockButton();
+    removeErrorClass();
 
     //Check whether to scroll up or down
     var n;
@@ -257,6 +258,7 @@ function unlock() {
     disableUnlockButton();
     clickSound();
     hideMessage();
+    correctNumbersArray = [];
     selectedNumbers = document.getElementsByClassName("selected");
     selectedNumbersArray = [];
     message = [];
@@ -285,25 +287,25 @@ function checkMatches() {
     for (var i = 0; i < selectedNumbersArray.length; i++) {
         if (selectedNumbersArray[i] == lockCombination[i]) {
             counter++;
+            correctNumbersArray.push(selectedNumbers[i]);
         }
     }
     if (counter == 3) {
         match = true;
         counter = 0;
-        message.push("Yay! You did it Mate!");
+        message.push("Yay! You did it mate!");
         winningState();
     }
     else if (counter == 0) {
         message.push("Sorry, mate. Try Again!");
-        sorrySound();
         tryAgainState();
     }
     else {
         if (selectedNumbersArray[0] == lockCombination[0]) {
-            message.push("You got the first number!");
+            message.push("You got the first number! ");
         }
         if (selectedNumbersArray[1] == lockCombination[1]) {
-            message.push("The second number is correct.");
+            message.push("The second number is correct. ");
         }
         if (selectedNumbersArray[2] == lockCombination[2]) {
             message.push("You got the third number right.")
@@ -311,18 +313,25 @@ function checkMatches() {
         counter = 0;
         almostWinningState();
     }
-    console.log(message);
 }
 
 //Change display to winning state
 function winningState() {
     tadaSound();
+    applyCorrectClass();
+    var youDidItMessage = document.createElement("div");
+    youDidItMessage.setAttribute("class", "winnerMessage");
+    youDidItMessage.innerHTML = message[0];
+    messageContainer.innerHTML = "";
+    messageContainer.appendChild(youDidItMessage);
+    showMessage();
+    setTimeout(displayOpenTreasureChest, 2000);
 }
 
-//Display "try again" state
+//Display "try again" when there is no matching number
 function tryAgainState() {
     sorrySound();
-    for (var i=0; i<selectedNumbers.length; i++){
+    for (var i = 0; i < selectedNumbers.length; i++) {
         selectedNumbers[i].setAttribute("class", "lockNumber selected error");
     }
     var tryAgainMessage = document.createElement("div");
@@ -333,8 +342,48 @@ function tryAgainState() {
     showMessage();
 }
 
+//Display which number matches the lock combination
 function almostWinningState() {
     chimeSound();
+    applyCorrectClass();
+    var correctNumberMessage = document.createElement("div");
+    correctNumberMessage.setAttribute("class", "correctMessage");
+    for (var x = 0; x < message.length; x++) {
+        correctNumberMessage.innerHTML += message[x];
+    }
+    messageContainer.innerHTML = "";
+    messageContainer.appendChild(correctNumberMessage);
+    showMessage();
+}
+
+//Remove "error" class in currently displayed numbers
+function removeErrorClass() {
+    var errorClass = document.getElementsByClassName("error");
+    while (errorClass.length != 0) {
+        for (var i = 0; i < errorClass.length; i++) {
+            errorClass[i].setAttribute("class", "lockNumber selected");
+        }
+        errorClass = document.getElementsByClassName("error");
+    }
+}
+
+//Apply "correct" class to numbers currently displayed and match numbers in lock combination
+function applyCorrectClass() {
+    for (var i = 0; i < correctNumbersArray.length; i++) {
+        correctNumbersArray[i].setAttribute("class", "lockNumber selected correct");
+    }
+}
+
+//Display open treasure chest
+function displayOpenTreasureChest() {
+    console.log("displayOpenTreasureChest function called");
+    lockContainer.parentNode.removeChild(lockContainer);
+    var openTreasureChestDiv = document.createElement("div");
+    openTreasureChestDiv.id = "openTreasureChest";
+    var openTreasureChest = document.createElement("img");
+    openTreasureChest.setAttribute("src", "assets/openTreasureChest.png");
+    openTreasureChestDiv.appendChild(openTreasureChest);
+    gameArea.appendChild(openTreasureChestDiv);
 }
 
 
