@@ -141,9 +141,10 @@ a:hover {
     display: inline-block;
     position: relative;
     visibility: visible;
-    width: 70vw;
-    margin: 8vh 0 auto;
+    width: 90vw;
+    margin: 5vh 0 auto;
     font-size: 5vw;
+    clear: both;
 }
 
 #lockContainer {
@@ -199,6 +200,43 @@ a:hover {
     cursor: pointer;
 }
 
+#hintButton {
+    display: inline-block;
+    font-size: 2vw;
+    color: #006631;
+    background-color: #D8D8D8;
+    border-radius: 10px;
+    margin-right: 2vw;
+    padding: 1vw;
+}
+
+#hintButton:hover {
+    cursor: pointer;
+    text-shadow: 2px 2px #ccffe5;
+    box-shadow: 4px 4px 12px #000000;
+}
+
+#giveUpButton {
+    display: inline-block;
+    font-size: 2vw;
+    color: #cc0000;
+    background-color: #D8D8D8;
+    border-radius: 10px;
+    margin-right: 2vw;
+    padding: 1vw;
+}
+
+#giveUpButton:hover {
+    cursor: pointer;
+    text-shadow: 2px 2px #FFFFFF;
+    box-shadow: 4px 4px 12px #000000;
+}
+
+#timer {
+    display: inline-block;
+    font-size: 2vw;
+}
+
 .error {
     text-decoration: line-through;
     color: #cc0000;
@@ -211,32 +249,47 @@ a:hover {
 }
 
 .correct {
-    border: 4px solid #00b359;
+    border: 8px solid #00b359;
     border-radius: 2px;
-    box-shadow: 3px 3px 6px #ccffe5;
+    box-shadow: 6px 6px 12px #ccffe5;
 }
 
 .correctMessage {
-    font-size: 5vw;
+    font-size: 3vw;
     color: #006631;
     text-shadow: 2px 2px 2px #ccffe5;
 }
 
+@keyframes fontColor {
+    from {
+        color: #000000;
+        text-shadow: 2px 2px 6px #FFFFFF;
+    }
+    to {
+        color: #FFFFFF;
+        text-shadow: 2px 2px 6px #000000;
+    }
+    
+}
 .winnerMessage {
     font-size: 5vw;
     color: #000000;
-    text-shadow: 2px 2px 6px #00b359;
+    text-shadow: 2px 2px 6px #FFFFFF;
+    animation-name: fontColor;
+    animation-duration: .5s;
+    animation-iteration-count: 5;
 }
 
 #openTreasureChest {
-    display: block;
+    display: inline-block;
     position: relative;
-    width: 70vw;
+    height: 50vh;
     margin: 5vh auto;
     background-color: #72d1f6;
 }
 
 img {
     position: relative;
-    width: 70vw;
+    height: 50vh;
+    max-width: 100vw;
 }

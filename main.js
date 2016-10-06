@@ -17,6 +17,9 @@ var downButton;
 var chevronDown;
 var lockNumber;
 var unlockButton;
+var hintButton;
+var giveUpButton;
+var timerDiv;
 var carouselIndex1 = 0;
 var carouselIndex2 = 0;
 var carouselIndex3 = 0;
@@ -68,6 +71,10 @@ function startGame() {
     gameArea.innerHTML = "";
     generateLockCombination();
     createLockArea();
+    createHintButton();
+    createGiveUpButton();
+    createTimerDiv();
+
 }
 
 //Create lock area
@@ -143,6 +150,29 @@ function createUnlockButton() {
     lockContainer.appendChild(unlockButton);
 }
 
+//Create "Hint" button
+function createHintButton() {
+    hintButton = document.createElement("div");
+    hintButton.id = "hintButton";
+    hintButton.innerHTML = "Hint";
+    hintButton.addEventListener("click", showHint);
+    gameArea.appendChild(hintButton);
+}
+
+//Crete "Give Up" button
+function createGiveUpButton() {
+    giveUpButton = document.createElement("div");
+    giveUpButton.id = "giveUpButton";
+    giveUpButton.innerHTML = "Give Up";
+    giveUpButton.addEventListener("click", giveUp);
+    gameArea.appendChild(giveUpButton);
+}
+
+//Create div element to display timer
+function createTimerDiv() {
+    timerDiv = document.createElement("div");
+
+}
 
 /*---------- GAME LOGIC ----------*/
 
@@ -378,6 +408,8 @@ function applyCorrectClass() {
 function displayOpenTreasureChest() {
     console.log("displayOpenTreasureChest function called");
     lockContainer.parentNode.removeChild(lockContainer);
+    hintButton.parentNode.removeChild(hintButton);
+    giveUpButton.parentNode.removeChild(giveUpButton);
     var openTreasureChestDiv = document.createElement("div");
     openTreasureChestDiv.id = "openTreasureChest";
     var openTreasureChest = document.createElement("img");
@@ -386,6 +418,25 @@ function displayOpenTreasureChest() {
     gameArea.appendChild(openTreasureChestDiv);
 }
 
+//Show hint
+function showHint() {
+    clickSound();
+    var hint = 0;
+    for (var i=0; i<lockCombination.length; i++) {
+        hint += lockCombination[i];
+    }
+    message = [];
+    message.push("The sum of all 3 numbers is " + hint.toString());
+    messageContainer.innerHTML = "";
+    messageContainer.innerHTML = message[0];
+    showMessage();
+}
+
+
+//Run this function when "Give Up" button is clicked
+function giveUp() {
+    console.log("giveUp function called");
+}
 
 /*---------- MODALS ----------*/
 
