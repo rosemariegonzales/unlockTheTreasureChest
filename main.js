@@ -7,6 +7,7 @@ var body;
 var gameArea;
 var gameIntro;
 var startButton;
+var messageContainer;
 var lockContainer;
 var lockCarouselArea;
 var lockCarousel;
@@ -16,6 +17,12 @@ var downButton;
 var chevronDown;
 var lockNumber;
 var unlockButton;
+var hintButton;
+var giveUpButton;
+var timerDiv;
+var second;
+var minute;
+var timer;
 var carouselIndex1 = 0;
 var carouselIndex2 = 0;
 var carouselIndex3 = 0;
@@ -25,13 +32,14 @@ var selectedNumbersArray = [];
 var message = [];
 var match = false;
 var counter = 0;
+var correctNumbersArray = [];
+var playAgainButton;
 
 
 /*---------- DOM ELEMENT CREATION ----------*/
 
 //Activate click handlers once the window loads
 window.onload = function () {
-    console.log('window loaded');
     document.getElementById("playButton").addEventListener("click", createGameArea);
     document.getElementById("howToPlayButton").addEventListener("click", displayHowToPlayModal);
     document.getElementById("aboutTheGameButton").addEventListener("click", displayAboutTheGameModal);
@@ -67,10 +75,22 @@ function startGame() {
     gameArea.innerHTML = "";
     generateLockCombination();
     createLockArea();
+    createHintButton();
+    createGiveUpButton();
+    createTimerDiv();
+    startTimer();
 }
 
 //Create lock area
 function createLockArea() {
+    //Create container for messages
+    messageContainer = document.createElement("div");
+    messageContainer.id = "messageContainer";
+    message = []; //To make sure message array is empty
+    message.push("Start guessing!");
+    messageContainer.innerHTML = message[0];
+    gameArea.appendChild(messageContainer);
+
     //Create container for the lock carousel
     lockContainer = document.createElement("div");
     lockContainer.id = "lockContainer";
@@ -130,11 +150,37 @@ function createLockCarousel() {
 function createUnlockButton() {
     unlockButton = document.createElement("div");
     unlockButton.id = "unlockButton";
-    unlockButton.setAttribute("class", "gameButton");
     unlockButton.innerHTML = "Unlock";
-    unlockButton.addEventListener("click", unlock);
+    enableUnlockButton();
     lockContainer.appendChild(unlockButton);
+}
 
+//Create "Hint" button
+function createHintButton() {
+    hintButton = document.createElement("div");
+    hintButton.id = "hintButton";
+    hintButton.innerHTML = "Hint";
+    hintButton.addEventListener("click", showHint);
+    gameArea.appendChild(hintButton);
+}
+
+//Create "Give Up" button
+function createGiveUpButton() {
+    giveUpButton = document.createElement("div");
+    giveUpButton.id = "giveUpButton";
+    giveUpButton.innerHTML = "Give Up";
+    giveUpButton.addEventListener("click", giveUp);
+    gameArea.appendChild(giveUpButton);
+}
+
+//Create div element to display timer
+function createTimerDiv() {
+    timerDiv = document.createElement("div");
+    timerDiv.id = "timer";
+    second = 0;
+    minute = 0;
+    timerDiv.innerHTML = minute + " min : " + second + " sec";
+    gameArea.appendChild(timerDiv);
 }
 
 
@@ -142,6 +188,7 @@ function createUnlockButton() {
 
 //Generate 3-digit lock combination
 function generateLockCombination() {
+    lockCombination = []; //To make sure lockCombination array is empty
     for (var i = 0; i < 3; i++) {
         var number = Math.floor(Math.random() * 10);
         lockCombination.push(number);
@@ -165,7 +212,6 @@ function checkLockCombination() {
 
 //Hide numbers in lock carousel
 function hideNumbers(lockCarouselId) {
-    console.log("hideNumber function called");
     var hideNumbersCarousel = document.getElementById(lockCarouselId);
     var hideNumbersArray = hideNumbersCarousel.getElementsByClassName("lockNumber");
     for (var i = 0; i < hideNumbersArray.length; i++) {
@@ -186,6 +232,9 @@ function showNumber(lockCarouselId, index) {
 //Scroll number in lock carousel
 function scrollNumber() {
     clickSound();
+    hideMessage();
+    enableUnlockButton();
+    removeErrorClass();
 
     //Check whether to scroll up or down
     var n;
@@ -193,7 +242,6 @@ function scrollNumber() {
         n = 1;
     }
     else if (this.getAttribute("class") == "downButton") {
-        console.log("scroll down");
         n = -1;
     }
 
@@ -201,35 +249,28 @@ function scrollNumber() {
     var scrollThisCarousel = this.parentElement;
     switch (scrollThisCarousel.id) {
         case "lockCarousel1":
-            console.log("carouselIndex1: ", carouselIndex1);
             hideNumbers(scrollThisCarousel.id);
             carouselIndex1 += n;
             carouselIndex1 = checkCarouselIndexValue(carouselIndex1);
             showNumber(scrollThisCarousel.id, carouselIndex1);
-            console.log("carouselIndex1: ", carouselIndex1);
             break;
         case "lockCarousel2":
-            console.log("carouselIndex2: ", carouselIndex2);
             hideNumbers(scrollThisCarousel.id);
             carouselIndex2 += n;
             carouselIndex2 = checkCarouselIndexValue(carouselIndex2);
             showNumber(scrollThisCarousel.id, carouselIndex2);
-            console.log("carouselIndex2: ", carouselIndex2);
             break;
         case "lockCarousel3":
-            console.log("carouselIndex3: ", carouselIndex3);
             hideNumbers(scrollThisCarousel.id);
             carouselIndex3 += n;
             carouselIndex3 = checkCarouselIndexValue(carouselIndex3);
             showNumber(scrollThisCarousel.id, carouselIndex3);
-            console.log("carouselIndex3: ", carouselIndex3);
             break;
     }
 }
 
 //Check carousel index value
 function checkCarouselIndexValue(index) {
-    console.log("checkCarouselIndexValue function called");
     if (index > 9) {
         index = 0;
         return index;
@@ -243,44 +284,69 @@ function checkCarouselIndexValue(index) {
     }
 }
 
+//Hide message container
+function hideMessage() {
+    messageContainer.style.visibility = "hidden";
+}
+
+//Show message container
+function showMessage() {
+    messageContainer.style.visibility = "visible";
+}
+
 //When the "Unlock" button is clicked, get selected numbers and run function to check matches
 function unlock() {
-    console.log('unlock function called');
+    disableUnlockButton();
     clickSound();
+    hideMessage();
+    correctNumbersArray = [];
     selectedNumbers = document.getElementsByClassName("selected");
     selectedNumbersArray = [];
     message = [];
     for (var i = 0; i < selectedNumbers.length; i++) {
         selectedNumbersArray.push(selectedNumbers[i].innerHTML);
     }
-    console.log(selectedNumbersArray);
     checkMatches();
+}
+
+//Enable "Unlock" button
+function enableUnlockButton() {
+    unlockButton.addEventListener("click", unlock);
+    unlockButton.setAttribute("class", "gameButton");
+}
+
+//Disable "Unlock" button
+function disableUnlockButton() {
+    unlockButton.removeEventListener("click", unlock);
+    unlockButton.setAttribute("class", "gameButton disabled");
 }
 
 //Check if chosen combination matches the computer-generated lock combination
 function checkMatches() {
     for (var i = 0; i < selectedNumbersArray.length; i++) {
         if (selectedNumbersArray[i] == lockCombination[i]) {
-            counter ++;
+            counter++;
+            correctNumbersArray.push(selectedNumbers[i]);
         }
     }
     if (counter == 3) {
         match = true;
         counter = 0;
-        message.push("Yay! You did it Mate!");
+        stopTimer();
+        message.push("Yay! You did it mate!");
         winningState();
+
     }
     else if (counter == 0) {
         message.push("Sorry, mate. Try Again!");
-        sorrySound();
         tryAgainState();
     }
     else {
         if (selectedNumbersArray[0] == lockCombination[0]) {
-            message.push("You got the first number!");
+            message.push("You got the first number! ");
         }
         if (selectedNumbersArray[1] == lockCombination[1]) {
-            message.push("The second number is correct.");
+            message.push("The second number is correct. ");
         }
         if (selectedNumbersArray[2] == lockCombination[2]) {
             message.push("You got the third number right.")
@@ -288,20 +354,154 @@ function checkMatches() {
         counter = 0;
         almostWinningState();
     }
-    console.log(message);
 }
 
 //Change display to winning state
 function winningState() {
     tadaSound();
+    applyCorrectClass();
+    var youDidItMessage = document.createElement("div");
+    youDidItMessage.setAttribute("class", "winnerMessage");
+    youDidItMessage.innerHTML = message[0];
+    messageContainer.innerHTML = "";
+    messageContainer.appendChild(youDidItMessage);
+    showMessage();
+    setTimeout(displayOpenTreasureChest, 2000);
 }
 
+//Display "try again" when there is no matching number
 function tryAgainState() {
     sorrySound();
+    for (var i = 0; i < selectedNumbers.length; i++) {
+        selectedNumbers[i].setAttribute("class", "lockNumber selected error");
+    }
+    var tryAgainMessage = document.createElement("div");
+    tryAgainMessage.setAttribute("class", "errorMessage");
+    tryAgainMessage.innerHTML = message[0];
+    messageContainer.innerHTML = "";
+    messageContainer.appendChild(tryAgainMessage);
+    showMessage();
 }
 
+//Display which number matches the lock combination
 function almostWinningState() {
     chimeSound();
+    applyCorrectClass();
+    var correctNumberMessage = document.createElement("div");
+    correctNumberMessage.setAttribute("class", "correctMessage");
+    for (var x = 0; x < message.length; x++) {
+        correctNumberMessage.innerHTML += message[x];
+    }
+    messageContainer.innerHTML = "";
+    messageContainer.appendChild(correctNumberMessage);
+    showMessage();
+}
+
+//Remove "error" class in currently displayed numbers
+function removeErrorClass() {
+    var errorClass = document.getElementsByClassName("error");
+    while (errorClass.length != 0) {
+        for (var i = 0; i < errorClass.length; i++) {
+            errorClass[i].setAttribute("class", "lockNumber selected");
+        }
+        errorClass = document.getElementsByClassName("error");
+    }
+}
+
+//Apply "correct" class to numbers currently displayed and match numbers in lock combination
+function applyCorrectClass() {
+    for (var i = 0; i < correctNumbersArray.length; i++) {
+        correctNumbersArray[i].setAttribute("class", "lockNumber selected correct");
+    }
+}
+
+//Display open treasure chest
+function displayOpenTreasureChest() {
+    lockContainer.parentNode.removeChild(lockContainer);
+    hintButton.parentNode.removeChild(hintButton);
+    giveUpButton.parentNode.removeChild(giveUpButton);
+    timerDiv.parentNode.removeChild(timerDiv);
+    var openTreasureChestDiv = document.createElement("div");
+    openTreasureChestDiv.id = "openTreasureChest";
+    var openTreasureChest = document.createElement("img");
+    openTreasureChest.setAttribute("src", "assets/openTreasureChest.png");
+    openTreasureChestDiv.appendChild(openTreasureChest);
+    gameArea.appendChild(openTreasureChestDiv);
+    var totalTimeMessage = document.createElement("div");
+    totalTimeMessage.style.fontSize = "2.5vw";
+    totalTimeMessage.innerHTML = "Total time it took you to unlock the chest is  " + minute + " mm : " + second + " ss";
+    gameArea.appendChild(totalTimeMessage);
+}
+
+//Show hint
+function showHint() {
+    clickSound();
+    var hint = 0;
+    for (var i = 0; i < lockCombination.length; i++) {
+        hint += lockCombination[i];
+    }
+    message = [];
+    message.push("The sum of all 3 numbers is " + hint.toString());
+    messageContainer.innerHTML = "";
+    messageContainer.innerHTML = message[0];
+    showMessage();
+}
+
+//Run this function when "Give Up" button is clicked
+function giveUp() {
+    stopTimer();
+    clickSound();
+    message = [];
+    message.push("Oh well.. Here is the lock combination:");
+    messageContainer.innerHTML = "";
+    messageContainer.innerHTML = message[0];
+    messageContainer.style.marginTop = "8vh";
+    messageContainer.style.marginBottom = "8vh";
+    showMessage();
+
+    //Remove div elements containing lock carousel, "Hint" button, "Give Up" button and timer
+    lockContainer.parentNode.removeChild(lockContainer);
+    hintButton.parentNode.removeChild(hintButton);
+    giveUpButton.parentNode.removeChild(giveUpButton);
+    timerDiv.parentNode.removeChild(timerDiv);
+
+    //Show lock combination
+    for (var i = 0; i < lockCombination.length; i++) {
+        var number = document.createElement("div");
+        number.setAttribute("class", "lockNumber");
+        number.style.display = "inline-block";
+        number.innerHTML = lockCombination[i];
+        gameArea.appendChild(number);
+    }
+
+    //Create "Play Again" button (reset game)
+    playAgainButton = document.createElement("div");
+    playAgainButton.setAttribute("class", "gameButton");
+    playAgainButton.innerHTML = "Play Again";
+    playAgainButton.addEventListener("click", startGame);
+    gameArea.appendChild(playAgainButton);
+}
+
+function startTimer() {
+    console.log("startTimer function called");
+    second = 0;
+    minute = 0;
+    timer = setInterval(setTimer, 1000);
+}
+
+function setTimer() {
+    console.log("setTimer function called");
+    second += 1;
+    if (second == 60) {
+        minute += 1;
+        second = 0;
+    }
+    timerDiv.innerHTML = minute + " min : " + second + " sec";
+}
+
+function stopTimer() {
+    clearInterval(timer);
+    console.log("time: ", minute, second);
 }
 
 

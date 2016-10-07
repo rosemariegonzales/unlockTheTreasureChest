@@ -84,6 +84,17 @@ a:hover {
     text-shadow: 2px 2px #FFFFFF;
 }
 
+.gameButton.disabled {
+    color: #707070;
+}
+
+.gameButton.disabled:hover {
+    color: #707070;
+    cursor: default;
+    box-shadow: 2px 2px #e69900;
+    text-shadow: none;
+}
+
 .modal {
     display: none; /* Hidden by default */
     width: 80vw;
@@ -111,7 +122,8 @@ a:hover {
 
 #gameArea {
     display: inline-block;
-    height: 100vh;
+    max-height: 100vh;
+    margin: auto;
 }
 
 #gameIntro {
@@ -123,21 +135,31 @@ a:hover {
     padding: 2vw;
     overflow: auto;
     font-size: 2.5vw;
+    margin-top: 5vh;
+}
+
+#messageContainer {
+    display: inline-block;
+    position: relative;
+    visibility: visible;
+    width: 90vw;
+    margin: 5vh 0 auto;
+    font-size: 5vw;
 }
 
 #lockContainer {
     display: block;
     position: relative;
     width: 70vw;
-    margin: 20vh auto;
+    margin: 5vh auto;
     background-color: #86592d;
-    border: 15px solid #e69900;
+    border: 10px solid #e69900;
     box-shadow: 5px 5px 15px  #505050;
 }
 
 #lockCarouselArea {
     display: block;
-    margin: 2vw auto;
+    margin: 1vw auto;
 }
 
 .lockCarousel {
@@ -154,20 +176,15 @@ a:hover {
 
 .lockNumber {
     display: block;
-    width: 14vw;
+    width: 12vw;
     padding: auto;
     margin: 1vw;
     background-color: #FFFFFF;
     border: 4px solid #ffcc66;
     border-radius: 2px;
-    font-size: 12vw;
-    transition: all 2s ease;
+    font-size: 10vw;
+    color: #000000;
 }
-
-.lockNumber:target {
-   height: 100%;
-}
-
 
 .downButton {
     display: block;
@@ -181,4 +198,98 @@ a:hover {
     color: #FFFFFF;
     text-shadow: 2px 2px 4px #000000;
     cursor: pointer;
+}
+
+#hintButton {
+    display: inline-block;
+    font-size: 2.5vw;
+    color: #006631;
+    background-color: #D8D8D8;
+    border-radius: 10px;
+    margin-right: 2vw;
+    padding: 1vw;
+}
+
+#hintButton:hover {
+    cursor: pointer;
+    text-shadow: 2px 2px #ccffe5;
+    box-shadow: 4px 4px 12px #000000;
+}
+
+#giveUpButton {
+    display: inline-block;
+    font-size: 2.5vw;
+    color: #cc0000;
+    background-color: #D8D8D8;
+    border-radius: 10px;
+    margin-right: 10vw;
+    padding: 1vw;
+}
+
+#giveUpButton:hover {
+    cursor: pointer;
+    text-shadow: 2px 2px #FFFFFF;
+    box-shadow: 4px 4px 12px #000000;
+}
+
+#timer {
+    display: inline-block;
+    font-size: 2.5vw;
+}
+
+.error {
+    text-decoration: line-through;
+    color: #cc0000;
+}
+
+.errorMessage {
+    font-size: 5vw;
+    color: #cc0000;
+    text-shadow: 2px 2px 2px #000000;
+}
+
+.correct {
+    border: 8px solid #00b359;
+    border-radius: 2px;
+    box-shadow: 6px 6px 12px #ccffe5;
+}
+
+.correctMessage {
+    font-size: 3vw;
+    color: #006631;
+    text-shadow: 2px 2px 2px #ccffe5;
+}
+
+@keyframes fontColor {
+    from {
+        color: #000000;
+        text-shadow: 2px 2px 6px #FFFFFF;
+    }
+    to {
+        color: #FFFFFF;
+        text-shadow: 2px 2px 6px #000000;
+    }
+    
+}
+.winnerMessage {
+    font-size: 5vw;
+    color: #000000;
+    text-shadow: 2px 2px 6px #FFFFFF;
+    animation-name: fontColor;
+    animation-duration: .5s;
+    animation-iteration-count: 5;
+}
+
+#openTreasureChest {
+    display: inline-block;
+    position: relative;
+    height: 50vh;
+    margin: 5vh auto;
+    background-color: #72d1f6;
+}
+
+img {
+    position: relative;
+    height: 50vh;
+    max-width: 100vw;
 }
