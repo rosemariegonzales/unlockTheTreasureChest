@@ -22,7 +22,7 @@ var giveUpButton;
 var timerDiv;
 var second;
 var minute;
-var hour;
+var timer;
 var carouselIndex1 = 0;
 var carouselIndex2 = 0;
 var carouselIndex3 = 0;
@@ -78,7 +78,7 @@ function startGame() {
     createHintButton();
     createGiveUpButton();
     createTimerDiv();
-
+    startTimer();
 }
 
 //Create lock area
@@ -179,8 +179,7 @@ function createTimerDiv() {
     timerDiv.id = "timer";
     second = 0;
     minute = 0;
-    hour = 0;
-    timerDiv.innerHTML = "Timer " + hour + " : " + minute + " : " + second;
+    timerDiv.innerHTML = minute + " min : " + second + " sec";
     gameArea.appendChild(timerDiv);
 }
 
@@ -333,8 +332,10 @@ function checkMatches() {
     if (counter == 3) {
         match = true;
         counter = 0;
+        stopTimer();
         message.push("Yay! You did it mate!");
         winningState();
+
     }
     else if (counter == 0) {
         message.push("Sorry, mate. Try Again!");
@@ -426,6 +427,10 @@ function displayOpenTreasureChest() {
     openTreasureChest.setAttribute("src", "assets/openTreasureChest.png");
     openTreasureChestDiv.appendChild(openTreasureChest);
     gameArea.appendChild(openTreasureChestDiv);
+    var totalTimeMessage = document.createElement("div");
+    totalTimeMessage.style.fontSize = "2.5vw";
+    totalTimeMessage.innerHTML = "Total time it took you to unlock the chest is  " + minute + " mm : " + second + " ss";
+    gameArea.appendChild(totalTimeMessage);
 }
 
 //Show hint
@@ -444,6 +449,7 @@ function showHint() {
 
 //Run this function when "Give Up" button is clicked
 function giveUp() {
+    stopTimer();
     clickSound();
     message = [];
     message.push("Oh well.. Here is the lock combination:");
@@ -474,6 +480,28 @@ function giveUp() {
     playAgainButton.innerHTML = "Play Again";
     playAgainButton.addEventListener("click", startGame);
     gameArea.appendChild(playAgainButton);
+}
+
+function startTimer() {
+    console.log("startTimer function called");
+    second = 0;
+    minute = 0;
+    timer = setInterval(setTimer, 1000);
+}
+
+function setTimer() {
+    console.log("setTimer function called");
+    second += 1;
+    if (second == 60) {
+        minute += 1;
+        second = 0;
+    }
+    timerDiv.innerHTML = minute + " min : " + second + " sec";
+}
+
+function stopTimer() {
+    clearInterval(timer);
+    console.log("time: ", minute, second);
 }
 
 
