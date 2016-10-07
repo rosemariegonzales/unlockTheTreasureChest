@@ -7,6 +7,7 @@ var body;
 var gameArea;
 var gameIntro;
 var startButton;
+var homeButton;
 var messageContainer;
 var lockContainer;
 var lockCarouselArea;
@@ -61,10 +62,17 @@ function createGameArea() {
     startButton.id = "startButton";
     startButton.setAttribute("class", "gameButton");
     startButton.innerHTML = "Start";
+    startButton.addEventListener("click", startGame);
+    homeButton = document.createElement("div");
+    homeButton.id = "homeButton";
+    homeButton.setAttribute("class", "gameButton");
+    homeButton.innerHTML = "Home";
+    homeButton.addEventListener("click", reloadHomePage);
     gameArea.appendChild(gameIntro);
     gameArea.appendChild(startButton);
+    gameArea.appendChild(homeButton);
     body.appendChild(gameArea);
-    startButton.addEventListener("click", startGame);
+
 }
 
 //Start the game
@@ -79,6 +87,12 @@ function startGame() {
     createGiveUpButton();
     createTimerDiv();
     startTimer();
+}
+
+//When "Home" button is click, reload page
+function reloadHomePage() {
+    clickSound();
+    setTimeout(function(){location.reload()}, 300);
 }
 
 //Create lock area
@@ -193,7 +207,6 @@ function generateLockCombination() {
         var number = Math.floor(Math.random() * 10);
         lockCombination.push(number);
     }
-    console.log('lock combination: ', lockCombination);
     checkLockCombination();
 }
 
@@ -204,7 +217,6 @@ function checkLockCombination() {
         lockCombination[1] == lockCombination[2]) {
         lockCombination = [];
         generateLockCombination();
-        console.log('generate lock again.. 2 same numbers present');
     } else {
         return lockCombination;
     }
@@ -429,7 +441,7 @@ function displayOpenTreasureChest() {
     gameArea.appendChild(openTreasureChestDiv);
     var totalTimeMessage = document.createElement("div");
     totalTimeMessage.style.fontSize = "2.5vw";
-    totalTimeMessage.innerHTML = "Total time it took you to unlock the chest is  " + minute + " mm : " + second + " ss";
+    totalTimeMessage.innerHTML = "Total time it took you to unlock the chest is  " + minute + "-min : " + second + "-sec.";
     gameArea.appendChild(totalTimeMessage);
 }
 
@@ -483,14 +495,12 @@ function giveUp() {
 }
 
 function startTimer() {
-    console.log("startTimer function called");
     second = 0;
     minute = 0;
     timer = setInterval(setTimer, 1000);
 }
 
 function setTimer() {
-    console.log("setTimer function called");
     second += 1;
     if (second == 60) {
         minute += 1;
@@ -501,7 +511,6 @@ function setTimer() {
 
 function stopTimer() {
     clearInterval(timer);
-    console.log("time: ", minute, second);
 }
 
 
