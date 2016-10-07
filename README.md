@@ -1,1 +1,1 @@
-# unlockTheTreasureChest
+Unlock The Treasure Chest is a pirate-themed guessing game where the player guesses the 3-digit lock combination of the treasure chest to find out what is inside the chest. The player is being timed as to how long he/she can open the chest. The 3-digit lock combination is randomly picked by the computer so it changes every game. A "Hint" button is also available to help the player.
