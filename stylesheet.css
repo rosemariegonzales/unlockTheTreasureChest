@@ -135,6 +135,7 @@ a:hover {
     padding: 2vw;
     overflow: auto;
     font-size: 2.5vw;
+    margin-top: 5vh;
 }
 
 #messageContainer {
@@ -144,7 +145,6 @@ a:hover {
     width: 90vw;
     margin: 5vh 0 auto;
     font-size: 5vw;
-    clear: both;
 }
 
 #lockContainer {
@@ -202,7 +202,7 @@ a:hover {
 
 #hintButton {
     display: inline-block;
-    font-size: 2vw;
+    font-size: 2.5vw;
     color: #006631;
     background-color: #D8D8D8;
     border-radius: 10px;
@@ -218,11 +218,11 @@ a:hover {
 
 #giveUpButton {
     display: inline-block;
-    font-size: 2vw;
+    font-size: 2.5vw;
     color: #cc0000;
     background-color: #D8D8D8;
     border-radius: 10px;
-    margin-right: 2vw;
+    margin-right: 10vw;
     padding: 1vw;
 }
 
@@ -234,7 +234,7 @@ a:hover {
 
 #timer {
     display: inline-block;
-    font-size: 2vw;
+    font-size: 2.5vw;
 }
 
 .error {

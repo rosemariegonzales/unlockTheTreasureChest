@@ -20,6 +20,9 @@ var unlockButton;
 var hintButton;
 var giveUpButton;
 var timerDiv;
+var second;
+var minute;
+var hour;
 var carouselIndex1 = 0;
 var carouselIndex2 = 0;
 var carouselIndex3 = 0;
@@ -30,6 +33,7 @@ var message = [];
 var match = false;
 var counter = 0;
 var correctNumbersArray = [];
+var playAgainButton;
 
 
 /*---------- DOM ELEMENT CREATION ----------*/
@@ -82,6 +86,7 @@ function createLockArea() {
     //Create container for messages
     messageContainer = document.createElement("div");
     messageContainer.id = "messageContainer";
+    message = []; //To make sure message array is empty
     message.push("Start guessing!");
     messageContainer.innerHTML = message[0];
     gameArea.appendChild(messageContainer);
@@ -159,7 +164,7 @@ function createHintButton() {
     gameArea.appendChild(hintButton);
 }
 
-//Crete "Give Up" button
+//Create "Give Up" button
 function createGiveUpButton() {
     giveUpButton = document.createElement("div");
     giveUpButton.id = "giveUpButton";
@@ -171,13 +176,20 @@ function createGiveUpButton() {
 //Create div element to display timer
 function createTimerDiv() {
     timerDiv = document.createElement("div");
-
+    timerDiv.id = "timer";
+    second = 0;
+    minute = 0;
+    hour = 0;
+    timerDiv.innerHTML = "Timer " + hour + " : " + minute + " : " + second;
+    gameArea.appendChild(timerDiv);
 }
+
 
 /*---------- GAME LOGIC ----------*/
 
 //Generate 3-digit lock combination
 function generateLockCombination() {
+    lockCombination = []; //To make sure lockCombination array is empty
     for (var i = 0; i < 3; i++) {
         var number = Math.floor(Math.random() * 10);
         lockCombination.push(number);
@@ -300,14 +312,12 @@ function unlock() {
 
 //Enable "Unlock" button
 function enableUnlockButton() {
-    console.log("enableUnlockButton function called");
     unlockButton.addEventListener("click", unlock);
     unlockButton.setAttribute("class", "gameButton");
 }
 
 //Disable "Unlock" button
 function disableUnlockButton() {
-    console.log("disableUnlockButton function called");
     unlockButton.removeEventListener("click", unlock);
     unlockButton.setAttribute("class", "gameButton disabled");
 }
@@ -406,10 +416,10 @@ function applyCorrectClass() {
 
 //Display open treasure chest
 function displayOpenTreasureChest() {
-    console.log("displayOpenTreasureChest function called");
     lockContainer.parentNode.removeChild(lockContainer);
     hintButton.parentNode.removeChild(hintButton);
     giveUpButton.parentNode.removeChild(giveUpButton);
+    timerDiv.parentNode.removeChild(timerDiv);
     var openTreasureChestDiv = document.createElement("div");
     openTreasureChestDiv.id = "openTreasureChest";
     var openTreasureChest = document.createElement("img");
@@ -422,7 +432,7 @@ function displayOpenTreasureChest() {
 function showHint() {
     clickSound();
     var hint = 0;
-    for (var i=0; i<lockCombination.length; i++) {
+    for (var i = 0; i < lockCombination.length; i++) {
         hint += lockCombination[i];
     }
     message = [];
@@ -432,11 +442,40 @@ function showHint() {
     showMessage();
 }
 
-
 //Run this function when "Give Up" button is clicked
 function giveUp() {
-    console.log("giveUp function called");
+    clickSound();
+    message = [];
+    message.push("Oh well.. Here is the lock combination:");
+    messageContainer.innerHTML = "";
+    messageContainer.innerHTML = message[0];
+    messageContainer.style.marginTop = "8vh";
+    messageContainer.style.marginBottom = "8vh";
+    showMessage();
+
+    //Remove div elements containing lock carousel, "Hint" button, "Give Up" button and timer
+    lockContainer.parentNode.removeChild(lockContainer);
+    hintButton.parentNode.removeChild(hintButton);
+    giveUpButton.parentNode.removeChild(giveUpButton);
+    timerDiv.parentNode.removeChild(timerDiv);
+
+    //Show lock combination
+    for (var i = 0; i < lockCombination.length; i++) {
+        var number = document.createElement("div");
+        number.setAttribute("class", "lockNumber");
+        number.style.display = "inline-block";
+        number.innerHTML = lockCombination[i];
+        gameArea.appendChild(number);
+    }
+
+    //Create "Play Again" button (reset game)
+    playAgainButton = document.createElement("div");
+    playAgainButton.setAttribute("class", "gameButton");
+    playAgainButton.innerHTML = "Play Again";
+    playAgainButton.addEventListener("click", startGame);
+    gameArea.appendChild(playAgainButton);
 }
+
 
 /*---------- MODALS ----------*/
 
